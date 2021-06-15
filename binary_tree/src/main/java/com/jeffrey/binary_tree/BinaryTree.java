@@ -1,5 +1,12 @@
 package com.jeffrey.binary_tree;
 
-public final class BinaryTree {
+import java.util.ArrayList;
+import java.util.List;
 
+public final class BinaryTree {
+    public static List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> traversalResult = new ArrayList<>();
+
+        return traversalResult;
+    }
 }
