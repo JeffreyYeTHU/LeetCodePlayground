@@ -2,7 +2,7 @@ package com.jeffrey.binary_tree;
 
 import org.junit.jupiter.api.Test;
 
-class BinaryTreeApplicationTests {
+class BinaryTreeTests {
 
 	@Test
 	void contextLoads() {
