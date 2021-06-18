@@ -7,19 +7,19 @@ import java.util.Queue;
 import java.util.Stack;
 
 public final class BinaryTree {
-    public static List<Integer> inorderRecur(TreeNode root) {
+    public static List<Integer> inOrderRecur(TreeNode root) {
         List<Integer> traversalResult = new ArrayList<>();
-        inorderRecurHelper(root, traversalResult);
+        inOrderRecurHelper(root, traversalResult);
         return traversalResult;
     }
 
-    public static List<Integer> inorderIter(TreeNode root) {
+    public static List<Integer> inOrderIter(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         Stack<TreeNode> nodes = new Stack<>();
         TreeNode currNode = root;
         while (!nodes.empty() || currNode != null) {
             if (currNode != null) {
-                nodes.add(currNode);
+                nodes.push(currNode);
                 currNode = currNode.getLeft();
             } else {
                 var node = nodes.pop();
@@ -30,7 +30,7 @@ public final class BinaryTree {
         return res;
     }
 
-    public static List<Integer> preorderIter(TreeNode root) {
+    public static List<Integer> preOrderIter(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         Stack<TreeNode> nodes = new Stack<>();
         TreeNode currNode = root;
@@ -47,9 +47,11 @@ public final class BinaryTree {
         return res;
     }
 
-    public static List<Integer> postorderIter(TreeNode root) {
+    public static List<Integer> postOrderIter(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         Stack<TreeNode> nodes = new Stack<>();
+        if (root == null)
+            return res;
         nodes.add(root);
         TreeNode curr = root;
         TreeNode preVisit = null;
@@ -72,6 +74,8 @@ public final class BinaryTree {
     public static List<Integer> bfs(TreeNode root) {
         Queue<TreeNode> nodes = new LinkedList<>();
         List<Integer> res = new ArrayList<>();
+        if (root == null)
+            return res;
         nodes.add(root);
         while (!nodes.isEmpty()) {
             var curr = nodes.remove();
@@ -84,11 +88,11 @@ public final class BinaryTree {
         return res;
     }
 
-    private static void inorderRecurHelper(TreeNode root, List<Integer> result) {
+    private static void inOrderRecurHelper(TreeNode root, List<Integer> result) {
         if (root != null) {
-            inorderRecurHelper(root.getLeft(), result);
+            inOrderRecurHelper(root.getLeft(), result);
             result.add(root.getVal());
-            inorderRecurHelper(root.getRight(), result);
+            inOrderRecurHelper(root.getRight(), result);
         }
     }
 }

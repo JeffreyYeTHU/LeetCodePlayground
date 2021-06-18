@@ -10,34 +10,34 @@ import org.junit.jupiter.api.Test;
 class BinaryTreeTests {
 
 	@Test
-	void inorderTraversal_normalCase() {
+	void inOrderRecur_normalCase() {
 		TreeNode root = generateTree();
-		List<Integer> res = BinaryTree.inorderRecur(root);
-		var actual = getInorderResult();
+		List<Integer> res = BinaryTree.inOrderRecur(root);
+		var actual = getInOrderResult();
 		assertIterableEquals(res, actual);
 	}
 
 	@Test
-	void preorderIter_normalCase() {
+	void preOrderIter_normalCase() {
 		TreeNode root = generateTree();
-		List<Integer> res = BinaryTree.preorderIter(root);
-		var actual = getPreorderResult();
+		List<Integer> res = BinaryTree.preOrderIter(root);
+		var actual = getPreOrderResult();
 		assertIterableEquals(res, actual);
 	}
 
 	@Test
-	void inorderIter_normalCase() {
+	void inOrderIter_normalCase() {
 		TreeNode root = generateTree();
-		List<Integer> res = BinaryTree.inorderIter(root);
-		var actual = getInorderResult();
+		List<Integer> res = BinaryTree.inOrderIter(root);
+		var actual = getInOrderResult();
 		assertIterableEquals(res, actual);
 	}
 
 	@Test
-	void postorderIter_normalCase() {
+	void postOrderIter_normalCase() {
 		TreeNode root = generateTree();
-		List<Integer> res = BinaryTree.postorderIter(root);
-		var actual = getPostorderResult();
+		List<Integer> res = BinaryTree.postOrderIter(root);
+		var actual = getPostOrderResult();
 		assertIterableEquals(res, actual);
 	}
 
@@ -45,7 +45,7 @@ class BinaryTreeTests {
 	void bfs_normalCase() {
 		TreeNode root = generateTree();
 		List<Integer> res = BinaryTree.bfs(root);
-		var actual = getBfResult();
+		var actual = getBfsResult();
 		assertIterableEquals(res, actual);
 	}
 
@@ -57,7 +57,7 @@ class BinaryTreeTests {
 		return root;
 	}
 
-	private List<Integer> getInorderResult() {
+	private List<Integer> getInOrderResult() {
 		var actual = new ArrayList<Integer>();
 		actual.add(2);
 		actual.add(4);
@@ -66,7 +66,7 @@ class BinaryTreeTests {
 		return actual;
 	}
 
-	private List<Integer> getPreorderResult() {
+	private List<Integer> getPreOrderResult() {
 		var actual = new ArrayList<Integer>();
 		actual.add(1);
 		actual.add(2);
@@ -75,7 +75,7 @@ class BinaryTreeTests {
 		return actual;
 	}
 
-	private List<Integer> getPostorderResult() {
+	private List<Integer> getPostOrderResult() {
 		var actual = new ArrayList<Integer>();
 		actual.add(4);
 		actual.add(2);
@@ -84,7 +84,7 @@ class BinaryTreeTests {
 		return actual;
 	}
 
-	private List<Integer> getBfResult() {
+	private List<Integer> getBfsResult() {
 		var actual = new ArrayList<Integer>();
 		actual.add(1);
 		actual.add(2);
