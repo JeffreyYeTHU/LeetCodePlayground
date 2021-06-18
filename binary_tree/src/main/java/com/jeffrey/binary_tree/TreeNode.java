@@ -41,4 +41,8 @@ public class TreeNode {
         this.setLeft(left);
         this.setRight(right);
     }
+
+    public boolean hasNoChildren() {
+        return this.getLeft() == null && this.getRight() == null;
+    }
 }

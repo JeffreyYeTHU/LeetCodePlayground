@@ -41,6 +41,14 @@ class BinaryTreeTests {
 		assertIterableEquals(res, actual);
 	}
 
+	@Test
+	void bfs_normalCase() {
+		TreeNode root = generateTree();
+		List<Integer> res = BinaryTree.bfs(root);
+		var actual = getBfResult();
+		assertIterableEquals(res, actual);
+	}
+
 	private TreeNode generateTree() {
 		TreeNode root = new TreeNode(1);
 		root.setLeft(new TreeNode(2));
@@ -73,6 +81,15 @@ class BinaryTreeTests {
 		actual.add(2);
 		actual.add(3);
 		actual.add(1);
+		return actual;
+	}
+
+	private List<Integer> getBfResult() {
+		var actual = new ArrayList<Integer>();
+		actual.add(1);
+		actual.add(2);
+		actual.add(3);
+		actual.add(4);
 		return actual;
 	}
 }

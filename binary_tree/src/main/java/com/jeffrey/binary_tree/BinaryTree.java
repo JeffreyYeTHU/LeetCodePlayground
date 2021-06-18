@@ -1,7 +1,9 @@
 package com.jeffrey.binary_tree;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
 public final class BinaryTree {
@@ -9,23 +11,6 @@ public final class BinaryTree {
         List<Integer> traversalResult = new ArrayList<>();
         inorderRecurHelper(root, traversalResult);
         return traversalResult;
-    }
-
-    public static List<Integer> preorderIter(TreeNode root) {
-        List<Integer> res = new ArrayList<>();
-        Stack<TreeNode> nodes = new Stack<>();
-        TreeNode currNode = root;
-        while (!nodes.empty() || currNode != null) {
-            if (currNode != null) {
-                res.add(currNode.getVal());
-                nodes.add(currNode);
-                currNode = currNode.getLeft();
-            } else {
-                var node = nodes.pop();
-                currNode = node.getRight();
-            }
-        }
-        return res;
     }
 
     public static List<Integer> inorderIter(TreeNode root) {
@@ -45,25 +30,56 @@ public final class BinaryTree {
         return res;
     }
 
+    public static List<Integer> preorderIter(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        Stack<TreeNode> nodes = new Stack<>();
+        TreeNode currNode = root;
+        while (!nodes.empty() || currNode != null) {
+            if (currNode != null) {
+                res.add(currNode.getVal());
+                nodes.add(currNode);
+                currNode = currNode.getLeft();
+            } else {
+                var node = nodes.pop();
+                currNode = node.getRight();
+            }
+        }
+        return res;
+    }
+
     public static List<Integer> postorderIter(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         Stack<TreeNode> nodes = new Stack<>();
         nodes.add(root);
         TreeNode curr = root;
-        TreeNode pre = null;
+        TreeNode preVisit = null;
         while (!nodes.empty()) {
             curr = nodes.peek();
-            if ((curr.getLeft() == null && curr.getRight() == null)
-                    || pre != null && (pre.getLeft() == curr || pre.getRight() == curr)) {
+            if (curr.hasNoChildren() || preVisit != null && preVisit == curr.getRight()) {
                 res.add(curr.getVal());
                 nodes.pop();
-                pre = curr;
+                preVisit = curr;
             } else {
-                if (curr.getLeft() != null)
-                    nodes.push(curr.getLeft());
                 if (curr.getRight() != null)
                     nodes.push(curr.getRight());
+                if (curr.getLeft() != null)
+                    nodes.push(curr.getLeft());
             }
+        }
+        return res;
+    }
+
+    public static List<Integer> bfs(TreeNode root) {
+        Queue<TreeNode> nodes = new LinkedList<>();
+        List<Integer> res = new ArrayList<>();
+        nodes.add(root);
+        while (!nodes.isEmpty()) {
+            var curr = nodes.remove();
+            res.add(curr.getVal());
+            if (curr.getLeft() != null)
+                nodes.add(curr.getLeft());
+            if (curr.getRight() != null)
+                nodes.add(curr.getRight());
         }
         return res;
     }
