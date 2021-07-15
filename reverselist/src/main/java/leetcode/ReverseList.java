@@ -22,6 +22,24 @@ public class ReverseList {
         return last;
     }
 
+    // reverse [a, b)
+    public ListNode reverse(ListNode a, ListNode b) {
+        ListNode pre = null;
+        ListNode curr = a;
+        while (curr != b) {
+            // save next
+            ListNode next = curr.next;
+
+            // reverse
+            curr.next = pre;
+
+            // shift pointer
+            pre = curr;
+            curr = next;
+        }
+        return pre;
+    }
+
     public ListNode reverseBetweenIterative(ListNode head, int left, int right) {
         if (left == right) {
             return head;
@@ -68,24 +86,21 @@ public class ReverseList {
 
     public ListNode reverseKGroup(ListNode head, int k) {
         // base case
-        int count = getListCount(head);
-        if (count <= k)
-            return head;
+        if (head == null)
+            return null;
+        ListNode a = head;
+        ListNode b = head;
+        for (int i = 0; i < k; i++) {
+            // less than k, return directly
+            if (b == null)
+                return head;
+            b = b.next;
+        }
 
-        // recursive
-
-    }
-
-    private int getListCount(ListNode head) {
-        int count = 1;
-        var curr = head;
-        while (curr.next != null)
-            count++;
-        return count;
-    }
-
-    private List<ListNode> splitList(ListNode head, int k) {
-        firstHead = head;
-
+        // reverse [head, b), then do it recursively
+        // be aware that b is the (k+1) element
+        ListNode newHead = reverse(a, b);
+        a.next = reverseKGroup(b, k);
+        return newHead;
     }
 }
