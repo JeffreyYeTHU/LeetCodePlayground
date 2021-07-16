@@ -1,6 +1,6 @@
 package leetcode;
 
-public class ReverseList {
+public final class ReverseList {
     ListNode successor = null; // for reverseN
 
     public ListNode reverseBetween(ListNode head, int m, int n) {
