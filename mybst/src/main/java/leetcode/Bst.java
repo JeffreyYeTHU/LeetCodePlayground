@@ -1,6 +1,6 @@
 package leetcode;
 
-public class GreeterTree {
+public class Bst {
 
     int sum = 0;
 
@@ -15,4 +15,6 @@ public class GreeterTree {
 
         return root;
     }
+
+    
 }
