@@ -1,5 +1,8 @@
 package leetcode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Bst {
 
     int sum = 0;
@@ -83,5 +86,61 @@ public class Bst {
         }
 
         return isValidBST(root.left, min, root) && isValidBST(root.right, root, max);
+    }
+
+    int[][] memo;
+
+    public int numTrees(int n) {
+        memo = new int[n + 1][n + 1];
+        return count(1, n);
+    }
+
+    private int count(int low, int high) {
+        if (low > high)
+            return 1;
+
+        // search memo
+        if (memo[low][high] != 0)
+            return memo[low][high];
+
+        int res = 0;
+        for (int i = low; i <= high; i++) {
+            int left = count(low, i - 1);
+            int right = count(i + 1, high);
+            res += left * right;
+        }
+
+        // update memo
+        memo[low][high] = res;
+        return res;
+    }
+
+    public List<TreeNode> generateTrees(int n) {
+        if (n == 0)
+            return new ArrayList<>();
+        return genBst(1, n);
+    }
+
+    private List<TreeNode> genBst(int low, int high) {
+        List<TreeNode> res = new ArrayList<>();
+        if (low > high) {
+            res.add(null);
+            return res;
+        }
+
+        for (int mid = low; mid <= high; mid++) {
+            List<TreeNode> leftTree = genBst(low, mid - 1);
+            List<TreeNode> rightTree = genBst(mid + 1, high);
+            for (TreeNode left : leftTree) {
+                for (TreeNode right : rightTree) {
+                    TreeNode root = new TreeNode(mid);
+                    root.left = left;
+                    root.right = right;
+                    res.add(root);
+                }
+            }
+        }
+
+        return res;
     }
 }
