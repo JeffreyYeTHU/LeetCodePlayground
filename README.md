@@ -1,1 +1,1 @@
-# LeetCodeInJava
+Having fun with LeetCode
