@@ -73,5 +73,67 @@ namespace LeetCode
             }
             return new string(sb.ToString().Reverse().ToArray());
         }
+
+        // 26
+        public int RemoveDuplicates(int[] nums)
+        {
+            if (nums.Length == 0) return 0;
+            int slow = 0;
+            int fast = 0;
+            while (fast < nums.Length)
+            {
+                if (nums[fast] != nums[slow])
+                {
+                    slow++;
+                    nums[slow] = nums[fast];
+                }
+                fast++;
+            }
+            return slow + 1;
+        }
+
+        // 83
+        public ListNode DeleteDuplicates(ListNode head)
+        {
+            if (head == null) return null;
+            var slow = head;
+            var fast = head;
+            while (fast != null)
+            {
+                if (fast.val != slow.val)
+                {
+                    slow.next = fast;
+                    slow = fast;
+                }
+                fast = fast.next;
+            }
+            slow.next = null;
+            return head;
+        }
+
+        // 27
+        public int RemoveElement(int[] nums, int val)
+        {
+            if (nums.Length == 0) return 0;
+            int slow = 0;
+            int fast = 0;
+            while (fast < nums.Length)
+            {
+                if (nums[fast] != val)
+                {
+                    nums[slow] = nums[fast];
+                    slow++;
+                }
+                fast++;
+            }
+            return slow;
+        }
+
+        // 283
+        public void MoveZeroes(int[] nums)
+        {
+            if (nums.Length == 0) return;
+
+        }
     }
 }
