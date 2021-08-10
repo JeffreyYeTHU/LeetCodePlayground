@@ -149,5 +149,37 @@ namespace LeetCode
                 pathSum -= matrix[row + 1][col + 1];
             }
         }
+
+        // 494
+        public int FindTargetSumWays(int[] nums, int target)
+        {
+            return TargetSumWays(nums, 0, target);
+        }
+
+        Dictionary<(int start, int target), int> sumWaysMemo = new();
+        private int TargetSumWays(int[] nums, int start, int target)
+        {
+            if (start >= nums.Length)
+                return 0;
+
+            if (start == nums.Length - 1)
+            {
+                // base case
+                int cnt = 0;
+                if (nums[start] == target) cnt++;
+                if (-nums[start] == target) cnt++;
+                return cnt;
+            }
+            if (sumWaysMemo.ContainsKey((start, target)))
+                return sumWaysMemo[(start, target)];
+            else
+            {
+                int addCurr = TargetSumWays(nums, start + 1, target - nums[start]);
+                int minusCurr = TargetSumWays(nums, start + 1, target + nums[start]);
+                int res = addCurr + minusCurr;
+                sumWaysMemo.Add((start, target), res);
+                return res;
+            }
+        }
     }
 }
