@@ -6,12 +6,13 @@ namespace LeetCode
     {
         static void Main(string[] args)
         {
-            int[][] matrix = new int[3][];
-            matrix[0] = new int[3] { 1, 2, 3 };
-            matrix[1] = new int[3] { 4, 5, 6 };
-            matrix[2] = new int[3] { 7, 8, 9 };
-            var dp = new DinamicPrograming();
-            int min = dp.MinFallingPathSumBt(matrix);
+            var c = new Course4();
+            var pre = new int[1][];
+            var qureies = new int[2][];
+            pre[0] = new int[]{1, 0};
+            qureies[0] = new int[]{0, 1};
+            qureies[1] = new int[]{1, 0};
+            var res = c.CheckIfPrerequisite(2, pre, qureies);
         }
     }
 }
