@@ -133,7 +133,9 @@ namespace LeetCode
         public void MoveZeroes(int[] nums)
         {
             if (nums.Length == 0) return;
-
+            int p = RemoveElement(nums, 0);
+            for(;p<nums.Length; p++)
+                nums[p] = 0;
         }
     }
 }
