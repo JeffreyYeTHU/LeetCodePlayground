@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LeetCode
 {
@@ -6,13 +8,16 @@ namespace LeetCode
     {
         static void Main(string[] args)
         {
-            var c = new Course4();
-            var pre = new int[1][];
-            var qureies = new int[2][];
-            pre[0] = new int[]{1, 0};
-            qureies[0] = new int[]{0, 1};
-            qureies[1] = new int[]{1, 0};
-            var res = c.CheckIfPrerequisite(2, pre, qureies);
+            int[] nums = new int[] { 10, 9, 2, 5, 3, 7, 101, 18 };
+            var sortedData = new SortedList<int, int>();  // make value=key
+            int[] dp = new int[nums.Length];
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (!sortedData.ContainsKey(nums[i]))
+                    sortedData.Add(nums[i], nums[i]);
+                dp[i] = sortedData.IndexOfKey(nums[i]) + 1;
+            }
+            Console.WriteLine(dp);
         }
     }
 }
