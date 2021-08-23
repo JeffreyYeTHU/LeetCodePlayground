@@ -1,7 +1,7 @@
 /*
- * @lc app=leetcode.cn id=94 lang=csharp
+ * @lc app=leetcode.cn id=144 lang=csharp
  *
- * [94] 二叉树的中序遍历
+ * [144] 二叉树的前序遍历
  */
 
 // @lc code=start
@@ -18,38 +18,36 @@
  *     }
  * }
  */
-public class Solution
-{
-    public IList<int> InorderTraversal(TreeNode root)
-    {
-        // solution 1:
+public class Solution {
+    public IList<int> PreorderTraversal(TreeNode root) {
+        // // solution 1: recursive
         // Traverse(root);
-        // return res;
+        // return preorder;
 
-        // solution 2:
+        // solution 2: iterative
         var s = new Stack<TreeNode>();
         var res = new List<int>();
         TreeNode p = root;
-        while (p != null || s.Count != 0){
+        while(p != null || s.Count != 0){
             if(p != null){
+                res.Add(p.val);
                 s.Push(p);
                 p = p.left;
-            } else {
-                var node = s.Pop();
-                res.Add(node.val);
-                p = node.right;
+            }
+            else{
+                p = s.Pop().right;
             }
         }
         return res;
     }
 
-    // List<int> res = new List<int>();
-    // void Traverse(TreeNode root)
-    // {
+    // List<int> preorder = new List<int>();
+    // void Traverse(TreeNode root){
     //     if (root == null)
     //         return;
+        
+    //     preorder.Add(root.val);
     //     Traverse(root.left);
-    //     res.Add(root.val);
     //     Traverse(root.right);
     // }
 }
