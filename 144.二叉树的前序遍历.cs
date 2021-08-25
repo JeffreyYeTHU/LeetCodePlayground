@@ -18,38 +18,43 @@
  *     }
  * }
  */
-public class Solution {
-    public IList<int> PreorderTraversal(TreeNode root) {
-        // // solution 1: recursive
-        // Traverse(root);
-        // return preorder;
+public class Solution
+{
+    Stack<TreeNode> s = new Stack<TreeNode>();
+    List<int> preorder = new List<int>();
+    TreeNode lastVisit = new TreeNode(-1);
+    public IList<int> PreorderTraversal(TreeNode root)
+    {
+        if (root == null)
+            return preorder;
 
-        // solution 2: iterative
-        var s = new Stack<TreeNode>();
-        var res = new List<int>();
-        TreeNode p = root;
-        while(p != null || s.Count != 0){
-            if(p != null){
-                res.Add(p.val);
-                s.Push(p);
-                p = p.left;
+        PushLeftBranch(root);
+        while (s.Count != 0)
+        {
+            var p = s.Peek();
+            if ((p.left == null || p.left == lastVisit) && p.right != lastVisit)
+            {
+                PushLeftBranch(p.right);
             }
-            else{
-                p = s.Pop().right;
+
+            if (p.right == null || p.right == lastVisit)
+            {
+                lastVisit = p;
+                s.Pop();
             }
         }
-        return res;
+        return preorder;
     }
 
-    // List<int> preorder = new List<int>();
-    // void Traverse(TreeNode root){
-    //     if (root == null)
-    //         return;
-        
-    //     preorder.Add(root.val);
-    //     Traverse(root.left);
-    //     Traverse(root.right);
-    // }
+    void PushLeftBranch(TreeNode p)
+    {
+        while (p != null)
+        {
+            preorder.Add(p.val);
+            s.Push(p);
+            p = p.left;
+        }
+    }
 }
 // @lc code=end
 
