@@ -6,115 +6,90 @@ namespace LeetCode
 {
     class Program
     {
-        static List<IList<string>> result = new List<IList<string>>();
         static void Main(string[] args)
         {
-            var r = SolveNQueens(4);
+            var sudoku = new Sudoku();
+            char[,] board = new char[,]{
+                { '5', '3', '.', '.', '7', '.', '.', '.', '.' },
+                { '6','.','.','1','9','5','.','.','.'},
+                { '.','9','8','.','.','.','.','6','.'},
+                { '8','.','.','.','6','.','.','.','3'},
+                { '4','.','.','8','.','3','.','.','1'},
+                { '7','.','.','.','2','.','.','.','6'},
+                { '.','6','.','.','.','.','2','8','.'},
+                { '.','.','.','4','1','9','.','.','5'},
+                { '.','.','.','.','8','.','.','7','9'}};
 
-            IList<IList<string>> SolveNQueens(int n)
-            {
-                Backtrack(new List<int>(), 0, n);
-                return result;
-            }
-
-            void Backtrack(List<int> queenPos, int row, int n)
-            {
-                if (queenPos.Count == n)
-                    result.Add(GetResStr(queenPos, n));
-
-                for (int j = 0; j < n; j++)
-                {
-                    if (IsValidPos(queenPos, row, j, n))
-                    {
-                        queenPos.Add(j);
-                        Backtrack(queenPos, row + 1, n);
-                        queenPos.RemoveAt(queenPos.Count - 1);
-                    }
-                }
-            }
-
-            // queenPos is formated as row by row, so only record the col idx
-            List<string> GetResStr(List<int> queenPos, int n)
-            {
-                var res = new List<string>();
-                foreach (var pos in queenPos)
-                {
-                    var s = new string('.', n);
-                    var sq = s.Remove(pos, 1).Insert(pos, "Q");
-                    res.Add(sq);
-                }
-                return res;
-            }
-
-            bool IsValidPos(List<int> queenPos, int row, int col, int n)
-            {
-                for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--)
-                {
-                    if (queenPos[i] == j)
-                        return false;
-                }
-
-                for (int i = row - 1; i >= 0; i--)
-                {
-                    if (queenPos[i] == col)
-                        return false;
-                }
-
-                for (int i = row - 1, j = col + 1; i >= 0 && j < n; i--, j++)
-                {
-                    if (queenPos[i] == j)
-                        return false;
-                }
-
-                return true;
-            }
+            sudoku.SolveSudoku(board);
         }
     }
 
-    public class Codec
+    public class Sudoku
     {
-        // Encodes a tree to a single string.
-        public string serialize(TreeNode root)
+        public void SolveSudoku(char[][] board)
         {
-            SeriHelper(root);
-            Console.WriteLine(res);
-            return res;
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    if (board[i][j] == '.')
+                        posToSolve.Add((i, j));
+                }
+            }
+            Backtrack(board, 0);
+            board = res;
         }
 
-        string res = "";
-        void SeriHelper(TreeNode root)
+        List<(int, int)> posToSolve = new List<(int, int)>();
+        char[][] res = new char[9][];
+        void Backtrack(char[][] board, int idx)
         {
-            if (root == null)
+            if (idx >= posToSolve.Count)
             {
-                res += "#,";
+                CopyTo(board, res);
                 return;
             }
 
-            res += root.val + ",";
-            SeriHelper(root.left);
-            SeriHelper(root.right);
-        }
-
-        // Decodes your encoded data to tree.
-        public TreeNode deserialize(string data)
-        {
-            string[] dataArr = data.Split(",");
-            var dataList = new List<string>(dataArr);
-            return DeseriHelper(dataList);
-        }
-
-        TreeNode DeseriHelper(List<string> dataList)
-        {
-            if (dataList[0] == "#")
+            int row = posToSolve[idx].Item1;
+            int col = posToSolve[idx].Item2;
+            for (char c = '1'; c <= '9'; c++)
             {
-                dataList.RemoveAt(0);
-                return null;
+                if (IsValid(board, row, col, c))
+                {
+                    // make choice
+                    board[row][col] = c;
+                    Backtrack(board, idx + 1);
+
+                    // undo choice
+                    board[row][col] = '.';
+                }
             }
-            var root = new TreeNode(int.Parse(dataList[0]));
-            dataList.RemoveAt(0);
-            root.left = DeseriHelper(dataList);
-            root.right = DeseriHelper(dataList);
-            return root;
+        }
+
+        bool IsValid(char[][] board, int row, int col, char c)
+        {
+            int corRow = (row / 3) * 3;
+            int corCol = (col / 3) * 3;
+            for (int i = 0; i < 9; i++)
+            {
+                if (board[row][i] == c)
+                    return false;
+                if (board[i][col] == c)
+                    return false;
+                if (board[corRow + i / 3][corCol + i % 3] == c)
+                    return false;
+            }
+
+            return true;
+        }
+
+        void CopyTo(char[][] source, char[][] target)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                target[i] = new char[9];
+                Array.Copy(source[i], target[i], 9);
+            }
         }
     }
 }
