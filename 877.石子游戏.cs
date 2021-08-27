@@ -9,8 +9,12 @@ public class Solution
 {
     public bool StoneGame(int[] piles)
     {
-        int half = piles.Sum() / 2;
-        return Dp(piles, 0, piles.Length - 1) > half;
+        // solution 1:
+        // int half = piles.Sum() / 2;
+        // return Dp(piles, 0, piles.Length - 1) > half;
+
+        // solution 2:
+        return true;
     }
 
     // Dp[i, j] = max of piles[i..j]
