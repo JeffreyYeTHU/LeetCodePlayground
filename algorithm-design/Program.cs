@@ -8,19 +8,51 @@ namespace LeetCode
     {
         static void Main(string[] args)
         {
-            var sudoku = new Sudoku();
-            char[,] board = new char[,]{
-                { '5', '3', '.', '.', '7', '.', '.', '.', '.' },
-                { '6','.','.','1','9','5','.','.','.'},
-                { '.','9','8','.','.','.','.','6','.'},
-                { '8','.','.','.','6','.','.','.','3'},
-                { '4','.','.','8','.','3','.','.','1'},
-                { '7','.','.','.','2','.','.','.','6'},
-                { '.','6','.','.','.','.','2','8','.'},
-                { '.','.','.','4','1','9','.','.','5'},
-                { '.','.','.','.','8','.','.','7','9'}};
+            string num1 = "2";
+            string num2 = "3";
+            int m = num1.Length;
+            int n = num2.Length;
+            int[] res = new int[m + n];
+            for (int i = m - 1; i >= 0; i--)
+            {
+                for (int j = n - 1; j > -0; j--)
+                {
+                    int mul = (num1[i] - '0') * (num2[j] - '0');
+                    int p1 = i + j;
+                    int p2 = i + j + 1;
+                    int sum = mul + res[p2];
+                    res[p2] = sum % 10;
+                    res[p1] += sum / 10;
+                }
+            }
 
-            sudoku.SolveSudoku(board);
+            int k = 0;
+            while (k < res.Length && res[k] == 0)
+                k++;
+            string str = "";
+            while (k < res.Length)
+                str += res[k];
+            Console.WriteLine(str);
+        }
+
+        static string Add(string a, string b)
+        {
+            int i = a.Length - 1;
+            int j = b.Length - 1;
+            int carry = 0;
+            string res = "";
+            while (i >= 0 || j >= 0)
+            {
+                int abit = (i >= 0) ? (int)a[i] - (int)'0' : 0;
+                int bbit = (j >= 0) ? (int)b[j] - (int)'0' : 0;
+                int sum = abit + bbit + carry;
+                int newBit = sum % 10;
+                carry = sum / 10;
+                res = res.Insert(0, newBit.ToString());
+                i--;
+                j--;
+            }
+            return res;
         }
     }
 
