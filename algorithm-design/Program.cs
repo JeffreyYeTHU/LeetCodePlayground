@@ -1,127 +1,126 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace LeetCode
 {
     class Program
     {
+        static HashSet<int> parenPos;
+        static Dictionary<int, int> leftParenToRight;
         static void Main(string[] args)
         {
-            string num1 = "2";
-            string num2 = "3";
-            int m = num1.Length;
-            int n = num2.Length;
-            int[] res = new int[m + n];
-            for (int i = m - 1; i >= 0; i--)
+            string s = "1-(3+5-2+(3+19-(3-1-4+(9-4-(4-(1+(3)-2)-5)+8-(3-5)-1)-4)-5)-4+3-9)-4-(3+2-5)-10";
+            var sb = new StringBuilder();
+            for (int i = 0; i < s.Length; i++)
             {
-                for (int j = n - 1; j > -0; j--)
+                if (s[i] != ' ')
+                    sb.Append(s[i]);
+            }
+            string sNospace = sb.ToString();
+
+            parenPos = new HashSet<int>();
+            leftParenToRight = new Dictionary<int, int>();
+            var stk = new Stack<int>();
+            for (int i = 0; i < sNospace.Length; i++)
+            {
+                if (sNospace[i] == '(')
                 {
-                    int mul = (num1[i] - '0') * (num2[j] - '0');
-                    int p1 = i + j;
-                    int p2 = i + j + 1;
-                    int sum = mul + res[p2];
-                    res[p2] = sum % 10;
-                    res[p1] += sum / 10;
+                    parenPos.Add(i);
+                    stk.Push(i);
+                }
+                else if (sNospace[i] == ')')
+                {
+                    parenPos.Add(i);
+                    leftParenToRight.Add(stk.Pop(), i);
                 }
             }
-
-            int k = 0;
-            while (k < res.Length && res[k] == 0)
-                k++;
-            string str = "";
-            while (k < res.Length)
-                str += res[k];
-            Console.WriteLine(str);
+            int res = Compute(sNospace, 0, sNospace.Length - 1);
         }
 
-        static string Add(string a, string b)
+        static int Compute(string s, int i, int j)
         {
-            int i = a.Length - 1;
-            int j = b.Length - 1;
-            int carry = 0;
-            string res = "";
-            while (i >= 0 || j >= 0)
-            {
-                int abit = (i >= 0) ? (int)a[i] - (int)'0' : 0;
-                int bbit = (j >= 0) ? (int)b[j] - (int)'0' : 0;
-                int sum = abit + bbit + carry;
-                int newBit = sum % 10;
-                carry = sum / 10;
-                res = res.Insert(0, newBit.ToString());
-                i--;
-                j--;
-            }
-            return res;
-        }
-    }
+            // base case
+            if (i > j)
+                return 0;
 
-    public class Sudoku
-    {
-        public void SolveSudoku(char[][] board)
-        {
-            for (int i = 0; i < 9; i++)
+            bool hasParen = RangeContainsParen(s, i, j, out int leftParenPos);
+            if (hasParen)
             {
-                for (int j = 0; j < 9; j++)
+                // open the first level of parenthese
+                int res = Compute(s, i, leftParenPos - 2);
+                int rightParenPos = 0;
+                while (parenPos.Contains(leftParenPos))
                 {
-                    if (board[i][j] == '.')
-                        posToSolve.Add((i, j));
+                    rightParenPos = leftParenToRight[leftParenPos];
+                    if (leftParenPos == i || s[leftParenPos - 1] == '+')
+                        res += Compute(s, leftParenPos + 1, rightParenPos - 1);
+                    else
+                        res -= Compute(s, leftParenPos + 1, rightParenPos - 1);
+
+                    bool stillHasLevelOne = RangeContainsParen(s, rightParenPos + 2, j, out leftParenPos);
+                    if (stillHasLevelOne)
+                    {
+                        if (s[rightParenPos + 1] == '+')
+                            res += Compute(s, rightParenPos + 2, leftParenPos - 2);
+                        else
+                            res -= Compute(s, rightParenPos + 2, leftParenPos - 2);
+                    }
+                }
+                if (rightParenPos == j || s[rightParenPos + 1] == '+')
+                    res += Compute(s, rightParenPos + 2, j);
+                else
+                    res -= Compute(s, rightParenPos + 2, j);
+                return res;
+            }
+            else
+            {
+                int res = 0;
+                int slow = i - 1;
+                int fast = i;
+                if (s[i] == '+' || s[i] == '-')
+                {
+                    slow++;
+                    fast++;
+                }
+                while (fast <= j)
+                {
+                    while (fast <= j)
+                    {
+                        if (s[fast] == '+' || s[fast] == '-')
+                            break;
+                        fast++;
+                    }
+
+                    int curr = int.Parse(s.Substring(slow + 1, fast - slow - 1));
+                    if (slow == i - 1 || s[slow] == '+')
+                        res += curr;
+                    else
+                        res -= curr;
+
+                    slow = fast;
+                    fast++;
+                }
+                return res;
+            }
+        }
+
+        // for s[i..j], check if it has parenthese, if so, set the first
+        //  left paren pos to parameter 'leftParen'
+        static bool RangeContainsParen(string s, int i, int j, out int leftParenPos)
+        {
+            for (int k = i; k <= j; k++)
+            {
+                if (parenPos.Contains(k))
+                {
+                    leftParenPos = k;
+                    return true;
                 }
             }
-            Backtrack(board, 0);
-            board = res;
+            leftParenPos = -1;
+            return false;
         }
 
-        List<(int, int)> posToSolve = new List<(int, int)>();
-        char[][] res = new char[9][];
-        void Backtrack(char[][] board, int idx)
-        {
-            if (idx >= posToSolve.Count)
-            {
-                CopyTo(board, res);
-                return;
-            }
-
-            int row = posToSolve[idx].Item1;
-            int col = posToSolve[idx].Item2;
-            for (char c = '1'; c <= '9'; c++)
-            {
-                if (IsValid(board, row, col, c))
-                {
-                    // make choice
-                    board[row][col] = c;
-                    Backtrack(board, idx + 1);
-
-                    // undo choice
-                    board[row][col] = '.';
-                }
-            }
-        }
-
-        bool IsValid(char[][] board, int row, int col, char c)
-        {
-            int corRow = (row / 3) * 3;
-            int corCol = (col / 3) * 3;
-            for (int i = 0; i < 9; i++)
-            {
-                if (board[row][i] == c)
-                    return false;
-                if (board[i][col] == c)
-                    return false;
-                if (board[corRow + i / 3][corCol + i % 3] == c)
-                    return false;
-            }
-
-            return true;
-        }
-
-        void CopyTo(char[][] source, char[][] target)
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                target[i] = new char[9];
-                Array.Copy(source[i], target[i], 9);
-            }
-        }
     }
 }
