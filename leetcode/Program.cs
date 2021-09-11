@@ -9,6 +9,11 @@ namespace LeetCode
     {
         static void Main(string[] args)
         {
+            //SortAlgoTest();
+        }
+
+        private static void SortAlgoTest()
+        {
             int[] arr = new int[] { 2, 5, 3, 1, 4 };
             var sroter = new Sorter();
 
@@ -27,7 +32,7 @@ namespace LeetCode
             // sroter.HeapSort(arr);
 
             // merger sort
-            // var res = sroter.MergeSort(arr);
+            var res = sroter.MergeSort(arr);
         }
     }
 }
