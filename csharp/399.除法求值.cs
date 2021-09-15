@@ -9,23 +9,32 @@ public class Solution
 {
     public double[] CalcEquation(IList<IList<string>> equations, double[] values, IList<IList<string>> queries)
     {
-        // Solution 1: dfs
-        // Regard it as a directed graph
-        var graph = BuildGraph(equations, values);
+        // // Solution 1: dfs
+        // // Regard it as a directed graph
+        // var graph = BuildGraph(equations, values);
 
-        // do dfs
+        // // do dfs
+        // double[] res = new double[queries.Count];
+        // for (int i = 0; i < queries.Count; i++)
+        // {
+        //     var from = queries[i][0];
+        //     var to = queries[i][1];
+        //     visited.Clear();
+        //     res[i] = Dfs(graph, from, to, 1.0);
+        // }
+        // return res;
+
+        // solution 2: bfs
+        var graph = BuildGraph(equations, values);
         double[] res = new double[queries.Count];
         for (int i = 0; i < queries.Count; i++)
         {
             var from = queries[i][0];
             var to = queries[i][1];
             visited.Clear();
-            res[i] = Dfs(graph, from, to, 1.0);
+            res[i] = Bfs(graph, from, to);
         }
         return res;
-
-        // solution 2: bfs
-
     }
 
     Dictionary<string, List<(string, double)>> BuildGraph(IList<IList<string>> equations, double[] values)
@@ -65,6 +74,36 @@ public class Solution
             }
         }
         return -1.0;
+    }
+
+    double Bfs(Dictionary<string, List<(string, double)>> graph, string from, string to)
+    {
+        if (!graph.ContainsKey(from) || !graph.ContainsKey(to))
+            return -1.0;
+        var q = new Queue<State>();
+        q.Enqueue(new State() { NodeId = from, DisToCurr = 1.0 });
+        visited.Add(from);
+        while (q.Count > 0)
+        {
+            var curr = q.Dequeue();
+            if (curr.NodeId == to)
+                return curr.DisToCurr;
+            foreach (var (nb, val) in graph[curr.NodeId])
+            {
+                if (!visited.Contains(nb))
+                {
+                    visited.Add(nb);
+                    q.Enqueue(new State() { NodeId = nb, DisToCurr = curr.DisToCurr * val });
+                }
+            }
+        }
+        return -1.0;
+    }
+
+    private class State
+    {
+        public string NodeId { get; set; }
+        public double DisToCurr { get; set; }
     }
 }
 // @lc code=end
