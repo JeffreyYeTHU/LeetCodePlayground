@@ -73,7 +73,8 @@ public class Solution
 
         public void Union(int from, int to)
         {
-            ancestor[Find(to)] = Find(from);
+            // ancestor[Find(to)] = Find(from);
+            ancestor[Find(from)] = Find(to);
         }
     }
 }
