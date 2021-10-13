@@ -10,27 +10,21 @@ public class Solution
     public void Rotate(int[][] matrix)
     {
         int n = matrix.Length;
-        int cnt = (n + 1) / 2;
-        HashSet<(int, int)> hasChecked = new HashSet<(int, int)>();
-        for (int i = 0; i < cnt; i++)
+        for (int i = 0; i < n / 2; i++)
         {
-            for (int j = 0; j < cnt; j++)
+            for (int j = 0; j < (n + 1) / 2; j++)
             {
-                hasChecked.Add((i, j));
-                if (!hasChecked.Contains((j, n - 1 - i)))
+                int row = i;
+                int col = j;
+                int temp = matrix[row][col];
+                for (int k = 0; k < 3; k++)
                 {
-                    int row = i;
-                    int col = j;
-                    int temp = matrix[row][col];
-                    for (int k = 0; k < 3; k++)
-                    {
-                        matrix[row][col] = matrix[n - 1 - col][row];
-                        int t = row;
-                        row = n - 1 - col;
-                        col = t;
-                    }
-                    matrix[row][col] = temp;
+                    matrix[row][col] = matrix[n - 1 - col][row];
+                    int t = row;
+                    row = n - 1 - col;
+                    col = t;
                 }
+                matrix[row][col] = temp;
             }
         }
     }
