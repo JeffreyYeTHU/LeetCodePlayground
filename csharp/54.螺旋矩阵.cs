@@ -26,6 +26,7 @@ public class Solution
                 matrix[row][col] = int.MaxValue;
             }
             col--;
+            row++;
             // down
             for (; row < m; row++)
             {
@@ -35,6 +36,7 @@ public class Solution
                 matrix[row][col] = int.MaxValue;
             }
             row--;
+            col--;
             // left
             for (; col >= 0; col--)
             {
@@ -44,6 +46,7 @@ public class Solution
                 matrix[row][col] = int.MaxValue;
             }
             col++;
+            row--;
             // up
             for (; row >= 0; row--)
             {
@@ -53,6 +56,7 @@ public class Solution
                 matrix[row][col] = int.MaxValue;
             }
             row++;
+            col++;
         }
         return res;
     }
