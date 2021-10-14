@@ -12,49 +12,69 @@ public class Solution
         int len = path.Length;
         if (len <= 1)
             return "/";
-        var res = new List<string>();
-        res.Add("/");
 
         // Solution 1 use 2 pointer
-        int slow = 0;
-        int fast = 1;
-        while (slow < len && fast < len)
+        // var res = new List<string>();
+        // res.Add("/");
+        // int slow = 0;
+        // int fast = 1;
+        // while (slow < len && fast < len)
+        // {
+        //     // skip connective /
+        //     while (fast < len && path[fast] == '/')
+        //     {
+        //         fast++;
+        //         slow++;
+        //     }
+
+        //     // fast pointer forward to next /
+        //     while (fast < len && path[fast] != '/')
+        //         fast++;
+
+        //     // check current dir
+        //     string currDir = path.Substring(slow + 1, fast - slow - 1);
+        //     if (currDir == "" || currDir == ".")
+        //     {
+        //         // do nothing
+        //     }
+        //     else if (currDir == "..")
+        //     {
+        //         res = ToParent(res);
+        //     }
+        //     else
+        //     {
+        //         if (res.Count != 1)
+        //             res.Add("/");
+        //         res.Add(currDir);
+        //     }
+
+        //     slow = fast;
+        //     fast++;
+        // }
+        // string simple = "";
+        // foreach (var dir in res)
+        // {
+        //     simple += dir;
+        // }
+        // return simple;
+
+        // Solution 2: split string
+        var res = new List<string>();
+        res.Add("/");
+        string[] dirs = path.Split('/');
+        foreach (var dir in dirs)
         {
-            // skip connective /
-            while (fast < len && path[fast] == '/')
-            {
-                fast++;
-                slow++;
-            }
-
-            // fast pointer forward to next /
-            while (fast < len && path[fast] != '/')
-                fast++;
-
-            // check current dir
-            string currDir = path.Substring(slow + 1, fast - slow - 1);
-            if (currDir == "" || currDir == ".")
-            {
-                // do nothing
-            }
-            else if (currDir == "..")
-            {
+            if (dir == "" || dir == ".")
+                continue;
+            else if (dir == "..")
                 res = ToParent(res);
-            }
             else
             {
                 if (res.Count != 1)
                     res.Add("/");
-                res.Add(currDir);
+                res.Add(dir);
             }
-
-            slow = fast;
-            fast++;
         }
-
-        // Solution 2: split string
-
-
         string simple = "";
         foreach (var dir in res)
         {
