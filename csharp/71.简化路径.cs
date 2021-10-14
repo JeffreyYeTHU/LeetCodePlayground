@@ -60,27 +60,25 @@ public class Solution
 
         // Solution 2: split string
         var res = new List<string>();
-        res.Add("/");
         string[] dirs = path.Split('/');
         foreach (var dir in dirs)
         {
             if (dir == "" || dir == ".")
                 continue;
             else if (dir == "..")
-                res = ToParent(res);
+                res = ToParent2(res);
             else
             {
-                if (res.Count != 1)
-                    res.Add("/");
                 res.Add(dir);
             }
         }
-        string simple = "";
+        var sb = new StringBuilder();
         foreach (var dir in res)
         {
-            simple += dir;
+            sb.Append("/");
+            sb.Append(dir);
         }
-        return simple;
+        return sb.Length == 0 ? "/" : sb.ToString();
     }
 
     List<string> ToParent(List<string> path)
@@ -95,6 +93,17 @@ public class Solution
         else
         {
             path.RemoveAt(path.Count - 1);
+            path.RemoveAt(path.Count - 1);
+            return path;
+        }
+    }
+
+    List<string> ToParent2(List<string> path)
+    {
+        if (path.Count == 0)
+            return path;
+        else
+        {
             path.RemoveAt(path.Count - 1);
             return path;
         }
