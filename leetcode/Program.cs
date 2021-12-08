@@ -10,6 +10,14 @@ namespace LeetCode
         static void Main(string[] args)
         {
             //SortAlgoTest();
+            var sln = new Solution();
+            char[][] board = new char[][] {
+                new char[] { 'X','X','X','X' },
+                new char[] { 'X','O','O','X' },
+                new char[] { 'X','X','O','X' },
+                new char[] { 'X','O','X','X' }
+            };
+            sln.Solve(board);
         }
 
         // Problem 651 is not available in LeetCode, so I write my own
@@ -52,6 +60,56 @@ namespace LeetCode
 
             // merger sort
             var res = sroter.MergeSort(arr);
+        }
+    }
+
+    // Surounded area: leetcode 130
+    class Solution
+    {
+        char[][] board;
+        int m, n;
+        public void Solve(char[][] board)
+        {
+            this.board = board;
+            m = board.Length;
+            n = board[0].Length;
+
+            // mark
+            for (int i = 0; i < m; i++)
+            {
+                Dfs(i, 0);
+                Dfs(i, n - 1);
+            }
+            for (int j = 0; j < n; j++)
+            {
+                Dfs(0, j);
+                Dfs(m - 1, j);
+            }
+
+            // remark
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (board[i][j] == 'O')
+                        board[i][j] = 'X';
+                    else if (board[i][j] == 'Y')
+                        board[i][j] = 'O';
+                }
+            }
+        }
+
+        // Mark all reachable region as 'Y'
+        void Dfs(int row, int col)
+        {
+            if (row < 0 || col < 0 || row >= m || col >= n || board[row][col] == 'X' || board[row][col] == 'Y')
+                return;
+
+            board[row][col] = 'Y';
+            Dfs(row, col - 1);
+            Dfs(row, col + 1);
+            Dfs(row - 1, col);
+            Dfs(row + 1, col);
         }
     }
 }
