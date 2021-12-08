@@ -64,52 +64,106 @@ namespace LeetCode
     }
 
     // Surounded area: leetcode 130
+    //class Solution
+    //{
+    //    char[][] board;
+    //    int m, n;
+    //    public void Solve(char[][] board)
+    //    {
+    //        this.board = board;
+    //        m = board.Length;
+    //        n = board[0].Length;
+
+    //        // mark
+    //        for (int i = 0; i < m; i++)
+    //        {
+    //            Dfs(i, 0);
+    //            Dfs(i, n - 1);
+    //        }
+    //        for (int j = 0; j < n; j++)
+    //        {
+    //            Dfs(0, j);
+    //            Dfs(m - 1, j);
+    //        }
+
+    //        // remark
+    //        for (int i = 0; i < m; i++)
+    //        {
+    //            for (int j = 0; j < n; j++)
+    //            {
+    //                if (board[i][j] == 'O')
+    //                    board[i][j] = 'X';
+    //                else if (board[i][j] == 'Y')
+    //                    board[i][j] = 'O';
+    //            }
+    //        }
+    //    }
+
+    //    // Mark all reachable region as 'Y'
+    //    void Dfs(int row, int col)
+    //    {
+    //        if (row < 0 || col < 0 || row >= m || col >= n || board[row][col] == 'X' || board[row][col] == 'Y')
+    //            return;
+
+    //        board[row][col] = 'Y';
+    //        Dfs(row, col - 1);
+    //        Dfs(row, col + 1);
+    //        Dfs(row - 1, col);
+    //        Dfs(row + 1, col);
+    //    }
+    //}
+
+    // example of union-find
     class Solution
     {
-        char[][] board;
-        int m, n;
-        public void Solve(char[][] board)
+        public bool EquationsPossible(String[] equations)
         {
-            this.board = board;
-            m = board.Length;
-            n = board[0].Length;
-
-            // mark
-            for (int i = 0; i < m; i++)
+            var uf = new Uf(26);
+            foreach (var eq in equations)
             {
-                Dfs(i, 0);
-                Dfs(i, n - 1);
-            }
-            for (int j = 0; j < n; j++)
-            {
-                Dfs(0, j);
-                Dfs(m - 1, j);
-            }
-
-            // remark
-            for (int i = 0; i < m; i++)
-            {
-                for (int j = 0; j < n; j++)
+                if (eq[1] == '=')
                 {
-                    if (board[i][j] == 'O')
-                        board[i][j] = 'X';
-                    else if (board[i][j] == 'Y')
-                        board[i][j] = 'O';
+                    uf.Union(eq[0] - 'a', eq[3] - 'a');
                 }
             }
+            foreach (var eq in equations)
+            {
+                if (eq[1] == '!')
+                {
+                    if (uf.Find(eq[0] - 'a') == uf.Find(eq[3] - 'a'))
+                        return false;
+                }
+            }
+            return true;
         }
 
-        // Mark all reachable region as 'Y'
-        void Dfs(int row, int col)
+        class Uf
         {
-            if (row < 0 || col < 0 || row >= m || col >= n || board[row][col] == 'X' || board[row][col] == 'Y')
-                return;
+            int[] parent;
+            public Uf(int n)
+            {
+                parent = new int[n];
+                for (int i = 0; i < n; i++)
+                    parent[i] = i;
+            }
 
-            board[row][col] = 'Y';
-            Dfs(row, col - 1);
-            Dfs(row, col + 1);
-            Dfs(row - 1, col);
-            Dfs(row + 1, col);
+            public void Union(int x, int y)
+            {
+                int px = Find(x);
+                int py = Find(y);
+                if (px != py)
+                    parent[py] = px;
+            }
+
+            public int Find(int x)
+            {
+                while (parent[x] != x)
+                {
+                    parent[x] = parent[parent[x]];
+                    x = parent[x];
+                }
+                return x;
+            }
         }
     }
 }
