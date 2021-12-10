@@ -10,14 +10,15 @@ namespace LeetCode
         static void Main(string[] args)
         {
             //SortAlgoTest();
-            var sln = new Solution();
-            char[][] board = new char[][] {
-                new char[] { 'X','X','X','X' },
-                new char[] { 'X','O','O','X' },
-                new char[] { 'X','X','O','X' },
-                new char[] { 'X','O','X','X' }
-            };
-            sln.Solve(board);
+
+            // var sln = new Solution();
+            // char[][] board = new char[][] {
+            //     new char[] { 'X','X','X','X' },
+            //     new char[] { 'X','O','O','X' },
+            //     new char[] { 'X','X','O','X' },
+            //     new char[] { 'X','O','X','X' }
+            // };
+            // sln.Solve(board);
         }
 
         // Problem 651 is not available in LeetCode, so I write my own
