@@ -5,7 +5,7 @@ namespace LeetCode
 {
     internal class DelayTime
     {
-        public int Dijkstra(int[][] times, int n, int k)
+        public int DijkstraImprove(int[][] times, int n, int k)
         {
             // build graph
             Dictionary<int, int>[] graph = new Dictionary<int, int>[n+1];
@@ -54,6 +54,58 @@ namespace LeetCode
             return res;
         }
 
+        public int Dijkstra(int[][] times, int n, int k)
+        {
+            // build graph
+            Dictionary<int, int>[] graph = new Dictionary<int, int>[n + 1];
+            for (int i = 1; i <= n; i++)
+                graph[i] = new Dictionary<int, int>();
+            foreach (var edge in times)
+            {
+                int from = edge[0];
+                int to = edge[1];
+                int time = edge[2];
+                graph[from].Add(to, time);
+            }
+
+            // find minmal route
+            bool[] visited = new bool[n + 1];
+            int[] distTo = new int[n + 1];  // do not use index 0
+            Array.Fill(distTo, int.MaxValue);
+            distTo[k] = 0;
+            PriorityQueue<int, int> pq = new();
+            pq.Enqueue(k, 0);
+            while (pq.Count > 0)
+            {
+                int currentNode, disToCurr;
+                pq.TryDequeue(out currentNode, out disToCurr);
+                visited[currentNode] = true;
+                if (distTo[currentNode] < disToCurr)
+                    continue;
+                distTo[currentNode] = disToCurr;
+                foreach (var nb in graph[currentNode])
+                {
+                    int nextNode = nb.Key;
+                    int weight = nb.Value;
+                    int disToNext = disToCurr + weight;
+                    if(!visited[nextNode] && disToNext < distTo[nextNode])
+                    {
+                        pq.Enqueue(nextNode, disToNext);
+                    }
+                }
+            }
+
+            // check the minimal
+            int res = 0;
+            for (int i = 1; i <= n; i++)
+            {
+                if (distTo[i] == int.MaxValue)
+                    return -1;
+                res = Math.Max(res, distTo[i]);
+            }
+            return res;
+        }
+
         public int BellFord(int[][] times, int n, int k)
         {
             int[] distTo = new int[n+1];  // do not use index 0
@@ -66,7 +118,8 @@ namespace LeetCode
                     int from = edge[0];
                     int to = edge[1];
                     int weight = edge[2];
-                    distTo[to] = Math.Min(distTo[from] + weight, distTo[to]);
+                    if(distTo[from] != int.MaxValue)
+                        distTo[to] = Math.Min(distTo[from] + weight, distTo[to]);
                 }
             }
 

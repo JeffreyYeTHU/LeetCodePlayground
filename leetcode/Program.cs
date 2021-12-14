@@ -15,8 +15,8 @@ namespace LeetCode
                 new int[3] {2, 3, 1},
                 new int[3] {3, 4, 1}
             };
-            //int result = dt.Dijkstra(times, 4, 2);
-            int result = dt.BellFord(times, 4, 2);
+            int result = dt.Dijkstra(times, 4, 2);
+            //int result = dt.BellFord(times, 4, 2);
         }
 
         // Problem 651 is not available in LeetCode, so I write my own
