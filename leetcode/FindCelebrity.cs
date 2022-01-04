@@ -1,30 +1,60 @@
+using System.Collections.Generic;
+
 namespace LeetCode
 {
     internal class FindCelebrity
     {
-        public int Find()
+        public int FindWithFastRullOut(int n)
         {
-            // find candidate
-            int n = 10;
-            int candidate = 0;
-            for (int other = 1; other < n; other++)
+            Queue<int> q = new();
+            // treat all as candidate
+            for (int i = 0; i < n; i++)
+                q.Enqueue(i);
+
+            // rull out
+            // because only one can be celebraty,
+            // and we can easily decide that
+            while(q.Count > 1)
             {
-                if (!Knows(other, candidate) || Knows(candidate, other))
+                int a = q.Dequeue();
+                int b = q.Dequeue();
+                if(Knows(a, b) || !Knows(b, a))
                 {
-                    // the current candidate is not a celebrity
-                    candidate = other;
+                    // a is not
+                    q.Enqueue(b);
+                }
+                else
+                {
+                    q.Enqueue(a);
                 }
             }
 
-            // check if the candidate is a celebrity
-            for (int other = 0; other < n; other++)
+            // last cand
+            int cand = q.Dequeue();
+            for(int other=0; other<n; other++)
             {
-                if (other != candidate && (Knows(candidate, other) || !Knows(other, candidate)))
-                {
+                if (cand == other) continue;
+                if (Knows(cand, other) || !Knows(other, cand))
                     return -1;
-                }
             }
-            return candidate;
+            return cand;
+        }
+
+        public int FindWithBrutleForce(int n)
+        {
+            for(int cand=0; cand<n; cand++)
+            {
+                int other = 0;
+                for(; other < n; other++)
+                {
+                    if (other == cand) continue;
+                    if (Knows(cand, other) || !Knows(other, cand))
+                        break;
+                }
+                if (other == n)
+                    return cand;
+            }
+            return -1;
         }
 
         private bool Knows(int a, int b)
