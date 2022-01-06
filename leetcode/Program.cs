@@ -9,14 +9,23 @@ namespace LeetCode
     {
         static void Main(string[] args)
         {
-            var dt = new DelayTime();
-            var times = new int[3][] {
-                new int[3] {2, 1, 1 },
-                new int[3] {2, 3, 1},
-                new int[3] {3, 4, 1}
-            };
-            int result = dt.Dijkstra(times, 4, 2);
+            // var dt = new DelayTime();
+            // var times = new int[3][] {
+            //     new int[3] {2, 1, 1 },
+            //     new int[3] {2, 3, 1},
+            //     new int[3] {3, 4, 1}
+            // };
+            // int result = dt.Dijkstra(times, 4, 2);
             //int result = dt.BellFord(times, 4, 2);
+            // int[] nums = new int[] { -1, 0, 1, 2, -1, -4 };
+            // Array.Sort(nums);
+            // var res = NSum(nums, 3, 0, 0);
+
+
+            var maxAdv = new MaxAdvantage();
+            var nums1 = new int[] { 2, 7, 11, 15 };
+            var nums2 = new int[] { 1, 10, 4, 11 };
+            var res = maxAdv.AdvantageCount(nums1, nums2);
         }
 
         // Problem 651 is not available in LeetCode, so I write my own
@@ -59,6 +68,61 @@ namespace LeetCode
 
             // merger sort
             var res = sroter.MergeSort(arr);
+        }
+
+        private static IList<IList<int>> NSum(int[] nums, int n, int start, int target)
+        {
+            int sz = nums.Length;
+            var res = new List<IList<int>>();
+            if (n < 2 || sz < n)
+                return res;
+
+            if (n == 2)
+            {
+                int lo = start;
+                int hi = sz - 1;
+                while (lo < hi)
+                {
+                    int left = nums[lo];
+                    int right = nums[hi];
+                    int curr = left + right;
+                    if (curr < target)
+                    {
+                        while (lo < hi && nums[lo] == left)
+                            lo++;
+                    }
+                    else if (curr > target)
+                    {
+                        while (lo < hi && nums[hi] == right)
+                            hi--;
+                    }
+                    else
+                    {
+                        var find = new List<int> { nums[lo], nums[hi] };
+                        res.Add(find);
+                        while (lo < hi && nums[lo] == left)
+                            lo++;
+                        while (lo < hi && nums[hi] == right)
+                            hi--;
+                    }
+                }
+                return res;
+            }
+            else
+            {
+                for (int i = start; i < sz;)
+                {
+                    var subSum = NSum(nums, n - 1, i + 1, target - nums[i]);
+                    foreach (var sub in subSum)
+                    {
+                        sub.Add(nums[i]);
+                        res.Add(sub);
+                    }
+                    while (i < sz - 1 && nums[i + 1] == nums[i])
+                        i++;
+                }
+                return res;
+            }
         }
     }
 
